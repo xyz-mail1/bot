@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 const { Client, Events, GatewayIntentBits, Partials, Collection } = require('discord.js');
+const chalkAnimation = require('chalk-animation');
 
 const fs = require("node:fs");
 const path = require('node:path');
@@ -15,8 +16,10 @@ const client = new Client({
 const token = process.env.token;
 const prefix = process.env.prefix;
 
+chalkAnimation.rainbow("Starting...")
+
 client.once(Events.ClientReady, c => {
-  console.log(`Ready! Logged in as ${c.user.tag}`);
+  chalkAnimation.neon(`\nReady! Logged in as ${c.user.tag}`);
 });
 
 client.commands = new Collection();
@@ -32,7 +35,6 @@ for (const folder of commandFolders) {
   for (const file of commandFiles) {
     const command = require(`./commands/${folder}/${file}`);
     client.commands.set(command.name, command);
-    console.table([`${command.name}`])
   }
 }
 
