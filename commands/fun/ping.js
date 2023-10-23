@@ -2,8 +2,8 @@ module.exports = {
   name: 'ping',
   description: 'Ping!',
   aliases: ['p'],
-  execute(message, args) {
-    message.channel.send('Pong.');
+  async execute(client, message, args) {
+    await message.channel.send(`Pong! ${client.ws.ping}`);
   },
 };
 

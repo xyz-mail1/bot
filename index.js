@@ -21,7 +21,7 @@ token = process.env.token,
 
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
-pe.start();
+//pe.start();
 
 chalkAnimation.rainbow("Starting...")
 
@@ -97,10 +97,9 @@ client.on(Events.MessageCreate, message => {
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
   try {
-    command.execute(message, args);
+    command.execute(client, message, args);
   } catch (error) {
 
-    console.log(pe.render(error));
     if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
     if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
     if (!error.stack) return
@@ -108,6 +107,7 @@ client.on(Events.MessageCreate, message => {
       .setTitle(`⛔ Prefix command error`)
       .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
       { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+    console.log(pe.render(error))
     try {
       errorLogs.send({ embeds: [errorEmbed] })
     } catch {
@@ -152,7 +152,7 @@ client.on(Events.InteractionCreate, async interaction => {
   try {
     await command.run(client, interaction);
   } catch (error) {
-    console.log(pe.render(error));
+
     if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
     if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
     if (!error.stack) return
@@ -160,6 +160,7 @@ client.on(Events.InteractionCreate, async interaction => {
       .setTitle(`⛔ Prefix command error`)
       .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
       { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+    console.log(pe.render(error))
     try {
       errorLogs.send({ embeds: [errorEmbed] })
     } catch {
