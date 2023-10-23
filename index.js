@@ -15,8 +15,9 @@ const {
     intents: [GatewayIntentBits.AutoModerationConfiguration, GatewayIntentBits.AutoModerationExecution, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildModeration, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildScheduledEvents, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
     partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember],
     shards: "auto"
-  })
-token = process.env.token,
+  }),
+  { readdirSync } = require("node:fs"),
+  token = process.env.token,
   prefix = process.env.prefix;
 
 var PrettyError = require('pretty-error');
@@ -48,7 +49,17 @@ for (const folder of commandFolders) {
   }
 }
 
-client.on(Events.MessageCreate, message => {
+readdirSync(`./src/events/`).forEach(async (file) => {
+  const event = await require(`./src/events/${file}`);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args));
+  }
+});
+
+
+/*client.on(Events.MessageCreate, message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(' ');
@@ -117,7 +128,7 @@ client.on(Events.MessageCreate, message => {
     }
   }
 
-});
+});*/
 
 const foldersPath = path.join(__dirname, 'slash');
 const slashCommandFolders = fs.readdirSync(foldersPath);
