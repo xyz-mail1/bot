@@ -1,7 +1,9 @@
-const { Collection, Events, EmbedBuilder: E, WebhookClient: W } = require('discord.js');
+const { Collection, Events, EmbedBuilder: E, WebhookClient: W, codeBlock } = require('discord.js');
 const cooldowns = new Collection();
 const errorLogs = new W({ url: `${process.env.errorHook}` })
 const prefix = "!"
+var PrettyError = require('pretty-error');
+var pe = new PrettyError();
 module.exports = {
   name: Events.MessageCreate,
   execute: async (message) => {
