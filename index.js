@@ -109,10 +109,10 @@ client.on(Events.MessageCreate, message => {
       .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
       { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
     try {
-      errorLogs.send(embeds: [errorEmbed])
+      errorLogs.send({ embeds: [errorEmbed] })
     } catch {
-      console.log('Error sending unhandled promise rejection to webhook')
-      console.log(error)
+      console.log('Error sending prefix command to webhook')
+      console.log(pe.render(error))
 
     }
   }
@@ -153,6 +153,20 @@ client.on(Events.InteractionCreate, async interaction => {
     await command.run(client, interaction);
   } catch (error) {
     console.log(pe.render(error));
+    if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
+    if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
+    if (!error.stack) return
+    const errorEmbed = new E()
+      .setTitle(`⛔ Prefix command error`)
+      .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
+      { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+    try {
+      errorLogs.send({ embeds: [errorEmbed] })
+    } catch {
+      console.log('Error sending slash command log to webhook')
+      console.log(pe.render(error))
+
+    }
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
     } else {
