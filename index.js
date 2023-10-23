@@ -20,48 +20,28 @@ const {
   token = process.env.token,
   prefix = process.env.prefix;
 
+const loadEvents = require(`./src/handlers/events.js`);
+const loadCommands = require(`./src/handlers/commands.js`);
+
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
-//pe.start();
+
 
 chalkAnimation.rainbow("Starting...")
-
-client.once(Events.ClientReady, c => {
-  chalkAnimation.neon(`\nReady! Logged in as ${c.user.tag}`);
-});
 
 client.commands = new Collection();
 client.cooldowns = new Collection();
 client.slash = new Collection();
-// webhooks 
 
-const errorLogs = new W({ url: `${process.env.errorHook}` })
 
-// prefix command handler 
+const errorLogs = new W({ url: `${process.env.errorHook}` });
 
-const commandFolders = fs.readdirSync('./commands');
-
-for (const folder of commandFolders) {
-  const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
-  for (const file of commandFiles) {
-    const command = require(`./commands/${folder}/${file}`);
-    client.commands.set(command.name, command);
-  }
-}
-
-readdirSync(`./src/events/`).forEach(async (file) => {
-  const event = await require(`./src/events/${file}`);
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args));
-  }
-});
+loadEvents(client);
+loadCommands(client);
 
 const foldersPath = path.join(__dirname, 'slash');
 const slashCommandFolders = fs.readdirSync(foldersPath);
 
-// slash command handler
 
 for (const slashFolder of slashCommandFolders) {
   const commandsPath = path.join(foldersPath, slashFolder);
