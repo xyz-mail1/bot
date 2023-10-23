@@ -176,5 +176,55 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
+process.on("unhandledRejection", (error) => {
+  if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
+  if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
+  if (!error.stack) return
+  const errorEmbed = new E()
+    .setTitle(`⛔ unhandledRejection error`)
+    .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
+    { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+  console.log(pe.render(error))
+  try {
+    errorLogs.send({ embeds: [errorEmbed] })
+  } catch {
+    console.log('Error sending unhandledRejection to webhook')
+    console.log(pe.render(error))
+  }
+})
+
+process.on("uncaughtException", (error) => {
+  if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
+  if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
+  if (!error.stack) return
+  const errorEmbed = new E()
+    .setTitle(`⛔ uncaughtException error`)
+    .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
+    { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+  console.log(pe.render(error))
+  try {
+    errorLogs.send({ embeds: [errorEmbed] })
+  } catch {
+    console.log('Error sending uncaughtException to webhook')
+    console.log(pe.render(error))
+  }
+})
+
+process.on("uncaughtExceptionMonitor", (error) => {
+  if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
+  if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
+  if (!error.stack) return
+  const errorEmbed = new E()
+    .setTitle(`⛔ uncaughtExceptionMonitor error`)
+    .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
+    { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
+  console.log(pe.render(error))
+  try {
+    errorLogs.send({ embeds: [errorEmbed] })
+  } catch {
+    console.log('Error sending uncaughtExceptionMonitor to webhook')
+    console.log(pe.render(error))
+  }
+})
 
 client.login(token);
