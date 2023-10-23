@@ -16,6 +16,11 @@ module.exports = {
 
     if (!command) return;
 
+    const list = ['911822497891102741', '901366487850303499']
+    if (command.SnM) {
+      if (!list.includes(message.author.id)) return;
+    }
+
     if (command.guildOnly && message.channel.type === 'dm') {
       return message.reply('I can\'t execute that command inside DMs!');
     }
