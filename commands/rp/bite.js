@@ -7,7 +7,7 @@ const db = new betterSqlite3('../../main.db');
 
 // Create a table to store hug data
 const createTable = db.prepare(`
-  CREATE TABLE IF NOT EXISTS kisses (
+  CREATE TABLE IF NOT EXISTS bites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sender TEXT,
     target TEXT,
@@ -16,7 +16,7 @@ const createTable = db.prepare(`
 `);
 createTable.run();
 module.exports = {
-  name: "kiss",
+  name: "bite",
   cooldown: 3,
   execute(client, message, args) {
     const a = pluralize(this.name);
@@ -37,17 +37,17 @@ module.exports = {
         // Increment count for sender hugging target
         const updateCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
         updateCount.run(sender, target.id);
-        message.reply(`*${a} ${target}* (Kiss Count: ${entry.count + 1})`);
+        message.reply(`*${a} ${target}* (Bite Count: ${entry.count + 1})`);
       } else if (reverseEntry) {
         // Increment count for target hugging sender
         const updateReverseCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
         updateReverseCount.run(target.id, sender);
-        message.reply(`*${a} ${target}* (Kiss Count: ${reverseEntry.count + 1})`);
+        message.reply(`*${a} ${target}* (Bite Count: ${reverseEntry.count + 1})`);
       } else {
         // Initialize count to 1 for new hug entries
         const insert = db.prepare(`INSERT INTO ${a} (sender, target, count) VALUES (?, ?, ?)`);
         insert.run(sender, target.id, 1);
-        message.reply(`*kisses ${target}* (Kiss Count: 1)`);
+        message.reply(`*kisses ${target}* (Bite Count: 1)`);
       }
     } else {
       message.reply('You need to mention someone to kiss!');

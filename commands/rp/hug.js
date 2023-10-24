@@ -1,7 +1,7 @@
 
 const { Client, GatewayIntentBits } = require('discord.js');
 const betterSqlite3 = require('better-sqlite3');
-const db = new betterSqlite3(`../../main.db`);
+const db = new betterSqlite3('../../main.db');
 var pluralize = require("pluralize")
 
 // Create a table to store hug data
