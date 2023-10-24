@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const betterSqlite3 = require('better-sqlite3');
 const db = new betterSqlite3('../../main.db');
 var pluralize = require("pluralize")
-
+const fetch = require("node-fetch");
 // Create a table to store hug data
 const createTable = db.prepare(`
   CREATE TABLE IF NOT EXISTS hugs (
@@ -16,13 +16,16 @@ const createTable = db.prepare(`
 createTable.run();
 module.exports = {
   name: "hug",
-  execute(client, message, args) {
+  cooldown: 3,
+  async execute(client, message, args) {
     const a = pluralize(this.name);
 
     const sender = message.author.id;
     const target = message.mentions.users.first();
     if (target) {
-
+      const response = await fetch("https://nekos.life/api/v2/img/hug")
+      const result = await response.json();
+      const image = await result.url;
 
       // Check if hug data exists for the sender hugging the target
       const select = db.prepare(`SELECT * FROM ${a} WHERE sender = ? AND target = ?`);
@@ -36,6 +39,7 @@ module.exports = {
         // Increment count for sender hugging target
         const updateCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
         updateCount.run(sender, target.id);
+        message.channel.send(image);
         message.reply(`*${a} ${target}* (Hug Count: ${entry.count + 1})`);
       } else if (reverseEntry) {
         // Increment count for target hugging sender
