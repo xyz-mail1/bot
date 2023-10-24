@@ -4,6 +4,6 @@ module.exports = {
   name: Events.ClientReady,
   once: true,
   execute: async (client) => {
-    chalkAnimation.neon(`\nReady! Logged in as ${client.user.tag}`);
+    chalkAnimation.rainbow(`Ready! Logged in as ${client.user.tag}`);
   }
 }

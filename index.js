@@ -26,7 +26,7 @@ const loadCommands = require(`./src/handlers/commands.js`);
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 
-
+console.clear();
 chalkAnimation.rainbow("Starting...")
 
 client.commands = new Collection();
