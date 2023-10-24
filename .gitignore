@@ -1,3 +1,4 @@
 node_modules
 .env
 hug_data.db
+kiss_data.db
