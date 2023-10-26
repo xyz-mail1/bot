@@ -2,10 +2,11 @@ const { Connect4 } = require('discord-gamecord');
 module.exports = {
   name: 'c4',
   execute(message, args) {
+    const opp = message.mentions.users.first();
     const Game = new Connect4({
       message: message,
       isSlashGame: false,
-      opponent: message.mentions.users.first(),
+      opponent: opp,
       embed: {
         title: 'Connect4 Game',
         statusTitle: 'Status',
