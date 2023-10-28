@@ -20,9 +20,6 @@ const {
   token = process.env.token,
   prefix = process.env.prefix;
 
-const loadEvents = require(`./src/handlers/events.js`);
-const loadCommands = require(`./src/handlers/commands.js`);
-
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 
@@ -36,8 +33,12 @@ client.slash = new Collection();
 
 const errorLogs = new W({ url: `${process.env.errorHook}` });
 
-loadEvents(client);
-loadCommands(client);
+const handlers = fs.readdirSync('./src/handlers/').filter(files => files.endsWith('.js'));
+
+for (const file of handlers) {
+  require(`./src/handlers/${file}`)(client);
+}
+
 
 const foldersPath = path.join(__dirname, 'slash');
 const slashCommandFolders = fs.readdirSync(foldersPath);
