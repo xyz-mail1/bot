@@ -32,8 +32,10 @@ module.exports = {
         const hugged = await target.displayName;
         const embed = new EB()
           .setColor('#ffb3b3')
-          .setImage(image)
-          .setAuthor({ name: `${author} hugs ${hugged}`, iconURL: message.author.displayAvatarURL() });
+          .setTitle("You gave a hug!")
+          .setURL("https://discord.com/invite/NQpTcs6r8z")
+          .setDescription(`${message.author} hugs ${target}`)
+          .setImage(image);
 
 
         // Check if hug data exists for the sender hugging the target
@@ -48,18 +50,20 @@ module.exports = {
           // Increment count for sender hugging target
           const updateCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
           updateCount.run(sender, target.id);
-          embed.setFooter({ text: `${entry.count + 1} hugs`, iconURL: message.author.displayAvatarURL() });
+          embed.setFooter({ text: `That's ${entry.count + 1} ${a} now!` });
           message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
         } else if (reverseEntry) {
           // Increment count for target hugging sender
           const updateReverseCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
           updateReverseCount.run(target.id, sender);
-          message.reply(`*${a} ${target}* (Hug Count: ${reverseEntry.count + 1})`);
+          embed.setFooter({ text: `That's ${reverseEntry.count + 1} ${a} now!` });
+          message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
         } else {
           // Initialize count to 1 for new hug entries
           const insert = db.prepare(`INSERT INTO ${a} (sender, target, count) VALUES (?, ?, ?)`);
           insert.run(sender, target.id, 1);
-          message.reply(`*${a} ${target}* (Hug Count: 1)`);
+          embed.setFooter({ text: `Their first hug from you!` });
+          message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
         }
       } else {
         message.reply('You need to mention someone to hug!');
