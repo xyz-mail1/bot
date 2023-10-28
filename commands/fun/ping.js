@@ -4,7 +4,11 @@ module.exports = {
   aliases: ['p'],
   SnM: true,
   async execute(client, message, args) {
-    await message.channel.send(`Pong! ${client.ws.ping}`);
+    await client.embed({
+      title: `Ping`,
+      desc: `${client.ws.ping}ms`,
+      type: 'reply'
+    }, message)
   },
 };
 
