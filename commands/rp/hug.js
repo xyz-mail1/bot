@@ -24,12 +24,10 @@ module.exports = {
     const sender = message.author.id;
     const target = message.mentions.members.first();
     if (target) {
-      const response = await fetch("https://nekos.life/api/v2/img/hug")
+      const response = await fetch("https://purrbot.site/api/img/sfw/hug/gif")
       const result = await response.json();
-      const image = await result.url;
+      const image = await result.link;
 
-      const author = await message.member.displayName;
-      const hugged = await target.displayName;
       const embed = new EB()
         .setColor('#ffb3b3')
         .setTitle("You gave a hug!")
