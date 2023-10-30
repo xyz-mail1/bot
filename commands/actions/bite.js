@@ -1,28 +1,20 @@
 
 const Discord = require('discord.js');
-const betterSqlite3 = require('better-sqlite3');
 const pluralize = require('pluralize');
-const db = new betterSqlite3('../../main.db');
+const db = require('$db/bite.js');
 const fetch = require("node-fetch");
 
-// Create a table to store hug data
-const createTable = db.prepare(`
-  CREATE TABLE IF NOT EXISTS bites (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sender TEXT,
-    target TEXT,
-    count INTEGER
-  )
-`);
-createTable.run();
 module.exports = {
   name: "bite",
   cooldown: 3,
   async execute(client, message, args) {
     const a = pluralize(this.name);
     const sender = message.author.id;
-    const target = message.mentions.users.first();
+    const mention = message.mentions.users.first();
+    const target = mention.id;
     if (target) {
+      db.incrementEitherBiteCount(sender, target);
+      const count = db.getEitherBiteCount(sender, target);
       const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
       const res = await response.json();
       const image = await res.link;
@@ -30,35 +22,14 @@ module.exports = {
         .setColor('#ffb3b3')
         .setTitle("You gave a bite!")
         .setURL("https://discord.com/invite/NQpTcs6r8z")
-        .setDescription(`${message.author} bites ${target}`)
+        .setDescription(`${message.author} bites ${mention}`)
         .setImage(image);
-      // Check if hug data exists for the sender hugging the target
-      const select = db.prepare(`SELECT * FROM ${a} WHERE sender = ? AND target = ?`);
-      const entry = select.get(sender, target.id);
-
-      // Check if hug data exists for the target hugging the sender
-      const reverseSelect = db.prepare(`SELECT * FROM ${a} WHERE sender = ? AND target = ?`);
-      const reverseEntry = reverseSelect.get(target.id, sender);
-
-      if (entry) {
-        // Increment count for sender hugging target
-        const updateCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
-        updateCount.run(sender, target.id);
-        embed.setFooter({ text: `That's ${entry.count + 1} ${a} now!` });
-        message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
-      } else if (reverseEntry) {
-        // Increment count for target hugging sender
-        const updateReverseCount = db.prepare(`UPDATE ${a} SET count = count + 1 WHERE sender = ? AND target = ?`);
-        updateReverseCount.run(target.id, sender);
-        embed.setFooter({ text: `That's ${reverseEntry.count + 1} hugs now!` });
-        message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
-      } else {
-        // Initialize count to 1 for new hug entries
-        const insert = db.prepare(`INSERT INTO ${a} (sender, target, count) VALUES (?, ?, ?)`);
-        insert.run(sender, target.id, 1);
+      if (count === 1) {
         embed.setFooter({ text: `It's their first bite from you!` });
-        message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+      } else {
+        embed.setFooter({ text: `That's a total of ${count} bites now!` });
       }
+      await message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
     } else {
       message.reply('You need to mention someone to kiss!');
     }
