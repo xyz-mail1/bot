@@ -13,9 +13,9 @@ module.exports = {
         color: '#5865F2'
       },
       emojis: {
-        board: '⚪',
-        player1: '🔴',
-        player2: '🟡'
+        board: '<:C4Empty:1168371056076140584>',
+        player1: '<:C4Red:1168371082319908935>',
+        player2: '<:C4Yellow:1168372750029705297>'
       },
       mentionUser: true,
       timeoutTime: 60000,
