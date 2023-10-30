@@ -4,7 +4,7 @@ const game = new TicTacToe({ language: 'en' })
 
 module.exports = {
   name: "ttt",
-  execute(message, args) {
+  execute(client, message, args) {
     game.handleMessage(message);
   }
 }

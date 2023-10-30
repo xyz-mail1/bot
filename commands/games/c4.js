@@ -1,7 +1,7 @@
 const { Connect4 } = require('discord-gamecord');
 module.exports = {
   name: 'c4',
-  execute(message, args) {
+  execute(client, message, args) {
     const opp = message.mentions.members.first();
     const Game = new Connect4({
       message: message,
