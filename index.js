@@ -1,8 +1,11 @@
+require("better-module-alias")(__dirname, {
+  $db: "./database/"
+});
+
 const dotenv = require('dotenv');
 dotenv.config();
 const {
   Client,
-  Events,
   GatewayIntentBits,
   Partials, Collection,
   WebhookClient: W,
@@ -16,9 +19,7 @@ const {
     partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember],
     shards: "auto"
   }),
-  { readdirSync } = require("node:fs"),
-  token = process.env.token,
-  prefix = process.env.prefix;
+  token = process.env.token;
 
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
