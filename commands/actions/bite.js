@@ -13,8 +13,8 @@ module.exports = {
     const mention = message.mentions.users.first();
     const target = mention.id;
     if (target) {
-      db.incrementEitherBiteCount(sender, target);
-      const count = db.getEitherBiteCount(sender, target);
+      db.incrementCount(sender, target);
+      const count = db.getCount(sender, target);
       const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
       const res = await response.json();
       const image = await res.link;

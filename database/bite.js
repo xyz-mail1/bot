@@ -11,7 +11,7 @@ db.exec(`
 `);
 
 module.exports = {
-  incrementEitherBiteCount: (sender, target) => {
+  incrementCount: (sender, target) => {
     const select = db.prepare(`SELECT * FROM bites WHERE ( sender = ? AND target = ?) OR ( sender = ? AND target = ?)`);
     const entry = select.get(sender, target, target, sender);
     if (entry) {
@@ -25,7 +25,7 @@ module.exports = {
     //stmt.run(sender, target, target, sender, sender, target);
   },
 
-  getEitherBiteCount: (sender, target) => {
+  getCount: (sender, target) => {
     const stmt = db.prepare('SELECT count FROM bites WHERE (sender = ? AND target = ?) OR (sender = ? AND target = ?)');
     const result = stmt.all(sender, target, target, sender);
 
