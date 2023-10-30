@@ -1,6 +1,4 @@
-require("better-module-alias")(__dirname, {
-  $db: "./database/"
-});
+
 
 const dotenv = require('dotenv');
 dotenv.config();

@@ -1,7 +1,7 @@
 
 const Discord = require('discord.js');
 const pluralize = require('pluralize');
-const db = require('$db/bite.js');
+//const db = require('$db/bite.js');
 const fetch = require("node-fetch");
 
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
     const mention = message.mentions.users.first();
     const target = mention.id;
     if (target) {
-      db.incrementCount(sender, target);
-      const count = db.getCount(sender, target);
+      client.incrementCount('bites', sender, target);
+      const count = await client.getCount('bites', sender, target);
       const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
       const res = await response.json();
       const image = await res.link;
