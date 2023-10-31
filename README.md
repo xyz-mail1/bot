@@ -18,3 +18,37 @@ Maggie loves cows!!!
 - Slash commands
 - Easy to understand handler
 - Local better-sqlite3 database to store command data
+
+## Requirements
+
+- Node.js v17+
+- better-sqlite3
+- Discord Token. Get it from [Discord Developers Portal](https://discord.com/developers/applications)
+
+## Installation
+
+Clone the repo by running
+
+```bash
+git clone https://github.com/xyz-mail1/bot.git
+```
+
+### After Cloning add your bot token to `.env` file
+
+Example of `.env` file
+
+```
+token="your token here"
+```
+
+### After that install the modules and run the bot:
+
+```bash
+npm install
+```
+
+To start your bot
+
+```js
+node .
+```
