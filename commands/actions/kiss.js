@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const fetch = require("node-fetch");
 
 module.exports = {
-  name: "hug",
+  name: "kiss",
   cooldown: 3,
   async execute(client, message, args) {
     const sender = message.author.id;

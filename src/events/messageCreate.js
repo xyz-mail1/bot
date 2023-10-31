@@ -1,18 +1,25 @@
 const { Collection, Events, EmbedBuilder: E, WebhookClient: W, codeBlock } = require('discord.js');
 const cooldowns = new Collection();
 const errorLogs = new W({ url: `${process.env.errorHook}` })
-const prefix = "!"
+const prefixes = ["sm", "!", "shivie", "maggie", "love"];
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 module.exports = {
   name: Events.MessageCreate,
   execute: async (message) => {
     let client = message.client;
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).trim().split(' ');
+    if (message.author.bot) return;
+    const lowercasedMessage = message.content.toLowerCase();
+    const prefixUsed = prefixes.find((prefix) => lowercasedMessage.startsWith(prefix.toLowerCase()));
+    if (!prefixUsed) return;
+    const strippedMessage = lowercasedMessage.slice(prefixUsed.length);
+
+    const args = strippedMessage.trim().split(' ');
     const commandName = args.shift().toLowerCase();
 
+    console.log(`commandName: ${commandName}`)
+    console.log(`args: ${args}` || "no args");
     const command = client.commands.get(commandName)
       || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
@@ -79,7 +86,9 @@ module.exports = {
         console.log(pe.render(error))
 
       }
+      //}
     }
-
   }
 }
+
+
