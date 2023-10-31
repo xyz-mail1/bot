@@ -10,3 +10,11 @@
 
 This repo was created by me to save the code for my bot.
 Maggie loves cows!!!
+
+## Features
+
+Muliple prefixes
+Command aliases
+Slash commands
+Easy to understand handler
+Local better-sqlite3 database to store command data
