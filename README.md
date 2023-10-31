@@ -6,7 +6,7 @@
   /></a>
 </div>
 
-## Maggie
+# Maggie
 
 This repo was created by me to save the code for my bot.
 Maggie loves cows!!!
@@ -33,7 +33,7 @@ Maggie loves cows!!!
 git clone https://github.com/xyz-mail1/bot.git
 ```
 
-<h3>After Cloning add your bot token to `.env` file</h3>
+### After Cloning add your bot token to `.env` file
 
 Example of `.env` file
 
