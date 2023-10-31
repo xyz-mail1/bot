@@ -27,7 +27,7 @@ Maggie loves cows!!!
 
 ## Installation
 
-<h1>Clone the repo by running</h1>
+### Clone the repo by running
 
 ```bash
 git clone https://github.com/xyz-mail1/bot.git
@@ -41,13 +41,13 @@ Example of `.env` file
 token="your token here"
 ```
 
-<h3>Install the modules and run the bot:</h3>
+### Install the modules and run the bot:
 
 ```bash
 npm install
 ```
 
-<h3>To start your bot</h3>
+### To start your bot
 
 ```js
 node .
