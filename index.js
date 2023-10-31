@@ -58,14 +58,12 @@ client.cooldowns = new Collection();
 client.slash = new Collection();
 
 const errorLogs = new W({ url: `${process.env.errorHook}` });
-
+const folderPath = "./src/handlers/";
 const handlers = fs
-  .readdirSync("./src/handlers/")
-  .filter((files) => files.endsWith(".js"));
+  .readdirSync(folderPath)
+  .sort((a, b) => +a.match(/\d+/) - +b.match(/\d+/));
 
-for (const file of handlers) {
-  require(`./src/handlers/${file}`)(client);
-}
+for (const file of handlers) require(`./src/handlers/${file}`)(client);
 
 process.on("unhandledRejection", (error) => {
   if (error)
