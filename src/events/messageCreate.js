@@ -1,7 +1,7 @@
 const { Collection, Events, EmbedBuilder: E, WebhookClient: W, codeBlock } = require('discord.js');
 const cooldowns = new Collection();
 const errorLogs = new W({ url: `${process.env.errorHook}` })
-const prefixes = ["sm", "!", "shivie", "maggie", "love"];
+const prefixes = ["sm", "!", "shivie", "maggie", "love", "<@1078352955771732078>"];
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 module.exports = {
@@ -18,8 +18,7 @@ module.exports = {
     const args = strippedMessage.trim().split(' ');
     const commandName = args.shift().toLowerCase();
 
-    console.log(`commandName: ${commandName}`)
-    console.log(`args: ${args}` || "no args");
+
     const command = client.commands.get(commandName)
       || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
