@@ -52,3 +52,9 @@ npm install
 ```js
 node .
 ```
+
+## Customisation
+
+You can change the bot prefix(es) from the events file.
+
+https://github.com/xyz-mail1/bot/blob/0a02cb416ad3a5c12a8188bd8d1ee7f411a5b1a6/src/events/messageCreate.js#L12
