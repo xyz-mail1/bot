@@ -46,12 +46,11 @@ const {
     shards: "auto",
   }),
   token = process.env.token;
-
+const maggie = require("chalk");
 var PrettyError = require("pretty-error");
 var pe = new PrettyError();
 
-console.clear();
-chalkAnimation.rainbow("Starting...");
+console.log(maggie.red.bgBlack("Starting..."));
 
 client.commands = new Collection();
 client.cooldowns = new Collection();
@@ -63,7 +62,23 @@ const handlers = fs
   .readdirSync(folderPath)
   .sort((a, b) => +a.match(/\d+/) - +b.match(/\d+/));
 
-for (const file of handlers) require(`./src/handlers/${file}`)(client);
+const loadedFiles = [];
+
+for (const file of handlers) {
+  require(`./src/handlers/${file}`)(client);
+  const handler = file.replace(".js", "");
+  loadedFiles.push({
+    handler,
+    loadedAt: new Date().toLocaleTimeString(),
+  });
+}
+
+console.table(
+  loadedFiles.map((fileInfo) => ({
+    handler: fileInfo.handler.replace(/"/g, ``),
+    loadedAt: fileInfo.loadedAt,
+  })),
+);
 
 process.on("unhandledRejection", (error) => {
   if (error)

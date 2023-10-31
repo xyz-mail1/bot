@@ -5,8 +5,8 @@ module.exports = (client) => {
     const event = await require(`../events/${file}`);
     if (event.once) {
       client.once(event.name, (...args) => event.execute(...args));
-    } else {
+    } else if (event.on) {
       client.on(event.name, (...args) => event.execute(...args));
     }
   });
-}
+};
