@@ -1,14 +1,15 @@
 const { Collection, Events, EmbedBuilder: E, WebhookClient: W, codeBlock } = require('discord.js');
 const cooldowns = new Collection();
 const errorLogs = new W({ url: `${process.env.errorHook}` })
-const prefixes = ["sm", "!", "shivie", "maggie", "love", "<@1078352955771732078>"];
+//const prefixes = ["sm", "!", "shivie", "maggie", "love", "<@1078352955771732078>"];
 var PrettyError = require('pretty-error');
 var pe = new PrettyError();
 module.exports = {
   name: Events.MessageCreate,
   execute: async (message) => {
     let client = message.client;
-
+    const ping = `<@${client.user.id}>`;
+    const prefixes = ["sm", "!", "shivie", "maggie", "love", ping]
     if (message.author.bot) return;
     const lowercasedMessage = message.content.toLowerCase();
     const prefixUsed = prefixes.find((prefix) => lowercasedMessage.startsWith(prefix.toLowerCase()));
