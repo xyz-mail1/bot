@@ -1,36 +1,52 @@
-const sqlite = require('better-sqlite3');
-const db = new sqlite(`../../main.db`);
+const { MongoClient } = require("mongodb");
+require("dotenv").config();
+const uri = process.env.mongoURI;
+const dbName = "love";
+const clction = "counts";
 
-// Create a table
-db.exec(`
-  CREATE TABLE IF NOT EXISTS counts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    variable TEXT,
-    sender TEXT,
-    target TEXT,
-    count INTEGER
-  )
-`);
+const maggie = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+maggie
+  .connect()
+  .then(() => {
+    console.log("Connected to MongoDB successfully");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
 
 module.exports = (client) => {
-  client.incrementCount = async function(variable, sender, target) {
-    // Check if entry for the users already exists in the db
-    const select = db.prepare(`SELECT * FROM counts WHERE (variable = ? AND sender = ? AND target = ?) OR (variable = ? AND sender = ? AND target = ?)`);
-    const entry = await select.get(variable, sender, target, variable, target, sender);
+  const db = maggie.db(dbName);
+  const collection = db.collection(clction);
+
+  client.incrementCount = async (variable, sender, target) => {
+    const filter = {
+      $or: [
+        { variable, sender, target },
+        { variable, sender: target },
+      ],
+    };
+    const entry = await collection.findOne(filter);
+
     if (entry) {
       console.log(entry.count);
-      const updateCount = db.prepare(`UPDATE counts SET count = count + 1 WHERE (variable = ? AND sender = ? AND target = ?) OR (variable = ? AND sender = ? AND target = ?)`);
-      updateCount.run(variable, sender, target, variable, target, sender);
+      await collection.updateOne(filter, { $inc: { count: 1 } });
     } else {
-      const insert = db.prepare(`INSERT INTO counts (variable, sender, target, count) VALUES (?, ?, ?, ?)`);
-      insert.run(variable, sender, target, 1);
+      await collection.insertOne({ variable, sender, target, count: 1 });
     }
   };
 
-  client.getCount = async function(variable, sender, target) {
-    const stmt = db.prepare('SELECT count FROM counts WHERE (variable = ? AND sender = ? AND target = ?) OR (variable = ? AND sender = ? AND target = ?)');
-    const result = await stmt.all(variable, sender, target, variable, target, sender);
-
-    return result.reduce((total, row) => total + row.count, 1);
+  client.getCount = async (variable, sender, target) => {
+    const filter = {
+      $or: [
+        { variable, sender, target },
+        { variable, sender: target },
+      ],
+    };
+    const results = await collection.find(filter).toArray();
+    return results.reduce((total, row) => total + row.count, 0);
   };
 };
