@@ -1,10 +1,11 @@
 const { Events } = require("discord.js");
 const chalkAnimation = require("chalk-animation");
+const shivie = require("chalk");
 module.exports = {
   name: Events.ClientReady,
   once: true,
   execute: async (client) => {
-    console.log(new Date().toLocaleTimeString());
-    chalkAnimation.rainbow(`Ready! Logged in as ${client.user.tag}`);
+    const time = new Date().toLocaleTimeString();
+    console.log(shivie.green(`[${time}]`) + ` Logged in as ${client.user.tag}`);
   },
 };

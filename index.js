@@ -1,14 +1,14 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const {
-  Client,
-  GatewayIntentBits,
-  Partials,
-  Collection,
-  WebhookClient: W,
-  EmbedBuilder: E,
-  codeBlock,
-} = require("discord.js"),
+    Client,
+    GatewayIntentBits,
+    Partials,
+    Collection,
+    WebhookClient: W,
+    EmbedBuilder: E,
+    codeBlock,
+  } = require("discord.js"),
   chalkAnimation = require("chalk-animation"),
   fs = require("node:fs"),
   path = require("node:path"),
@@ -49,8 +49,8 @@ const {
 const maggie = require("chalk");
 var PrettyError = require("pretty-error");
 var pe = new PrettyError();
-
-console.log(maggie.red.bgBlack("Starting..."));
+const time = new Date().toLocaleTimeString();
+console.log(maggie.green(`[${time}]`) + ` Starting...`);
 
 client.commands = new Collection();
 client.cooldowns = new Collection();
