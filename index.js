@@ -59,27 +59,28 @@ client.slash = new Collection();
 
 const errorLogs = new W({ url: `${process.env.errorHook}` });
 
-const handlers = fs
-  .readdirSync("./src/handlers/")
-  .filter((files) => files.endsWith(".js"));
+const handlers = fs.readdirSync("./src/handlers/");
 
 for (const file of handlers) {
   require(`./src/handlers/${file}`)(client);
 }
 
 process.on("unhandledRejection", (error) => {
-  if (error)
-    if (error.length > 950)
-      error = error.slice(0, 950) + "... view console for details";
-  if (error.stack)
-    if (error.stack.length > 950)
-      error.stack = error.stack.slice(0, 950) + "... view console for details";
-  if (!error.stack) return;
+  const errorMessage =
+    error.message.length > 950
+      ? `${error.message.slice(0, 950)}...`
+      : error.message;
+  const stackTrace = error.stack
+    ? error.stack.length > 950
+      ? `${error.stack.slice(0, 950)}...`
+      : error.stack
+    : "No stack error";
+
   const errorEmbed = new E().setTitle(`⛔ unhandledRejection error`).addFields([
-    { name: "Error", value: error ? codeBlock(error) : "No error" },
+    { name: "Error", value: errorMessage },
     {
       name: "Stack error",
-      value: error.stack ? codeBlock(error.stack) : "No stack error",
+      value: `\`\`\`\n${stackTrace}\n\`\`\``,
     },
   ]);
   console.log(pe.render(error));
@@ -92,18 +93,20 @@ process.on("unhandledRejection", (error) => {
 });
 
 process.on("uncaughtException", (error) => {
-  if (error)
-    if (error.length > 950)
-      error = error.slice(0, 950) + "... view console for details";
-  if (error.stack)
-    if (error.stack.length > 950)
-      error.stack = error.stack.slice(0, 950) + "... view console for details";
-  if (!error.stack) return;
+  const errorMessage =
+    error.message.length > 950
+      ? `${error.message.slice(0, 950)}.. `
+      : error.message;
+  const stackTrace = error.stack
+    ? error.stack.length > 950
+      ? `${error.stack.slice(0, 950)}...`
+      : error.stack
+    : "No stack error";
   const errorEmbed = new E().setTitle(`⛔ uncaughtException error`).addFields([
-    { name: "Error", value: error ? codeBlock(error) : "No error" },
+    { name: "Error", value: errorMessage },
     {
       name: "Stack error",
-      value: error.stack ? codeBlock(error.stack) : "No stack error",
+      value: `\`\`\`\n${stackTrace}\n\`\`\``,
     },
   ]);
   console.log(pe.render(error));
@@ -111,32 +114,6 @@ process.on("uncaughtException", (error) => {
     errorLogs.send({ embeds: [errorEmbed] });
   } catch {
     console.log("Error sending uncaughtException to webhook");
-    console.log(pe.render(error));
-  }
-});
-
-process.on("uncaughtExceptionMonitor", (error) => {
-  if (error)
-    if (error.length > 950)
-      error = error.slice(0, 950) + "... view console for details";
-  if (error.stack)
-    if (error.stack.length > 950)
-      error.stack = error.stack.slice(0, 950) + "... view console for details";
-  if (!error.stack) return;
-  const errorEmbed = new E()
-    .setTitle(`⛔ uncaughtExceptionMonitor error`)
-    .addFields([
-      { name: "Error", value: error ? codeBlock(error) : "No error" },
-      {
-        name: "Stack error",
-        value: error.stack ? codeBlock(error.stack) : "No stack error",
-      },
-    ]);
-  console.log(pe.render(error));
-  try {
-    errorLogs.send({ embeds: [errorEmbed] });
-  } catch {
-    console.log("Error sending uncaughtExceptionMonitor to webhook");
     console.log(pe.render(error));
   }
 });
