@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 
 module.exports = {
   name: "fuck",
+  aliases: ["bang", "rape", "sex"],
   cooldown: 3,
   SnM: true,
   async execute(client, message, args) {
@@ -20,7 +21,7 @@ module.exports = {
       const image = await res.link;
       const embed = new Discord.EmbedBuilder()
         .setColor("#ffb3b3")
-        .setTitle("You gave a fuck!")
+        .setTitle("You fuck someone!")
         .setURL("https://discord.com/invite/NQpTcs6r8z")
         .setDescription(`${message.author} fucks ${mention}`)
         .setImage(image);
