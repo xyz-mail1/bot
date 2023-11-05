@@ -1,18 +1,18 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const {
-  Client,
-  GatewayIntentBits: GB,
-  Partials,
-  Collection,
-  WebhookClient: W,
-  EmbedBuilder: E,
-  codeBlock,
-} = require("discord.js"),
-  chalkAnimation = require("chalk-animation"),
+    Client,
+    GatewayIntentBits: GB,
+    Partials,
+    Collection,
+    WebhookClient: W,
+    EmbedBuilder: E,
+    codeBlock,
+  } = require("discord.js"),
+  // chalkAnimation = require("chalk-animation"),
   fs = require("node:fs"),
   path = require("node:path"),
-  client = new Client({
+  /*client = new Client({
     intents: [
       GB.AutoModerationConfiguration,
       GB.AutoModerationExecution,
@@ -44,27 +44,32 @@ const {
       Partials.ThreadMember,
     ],
     shards: "auto",
-  }),
+  }),*/
   token = process.env.token;
+
+const BotClient = require("./src/structures/bot");
+
+const client = new BotClient();
+client.loadHandlers();
 
 var PrettyError = require("pretty-error");
 var pe = new PrettyError();
-
+/*
 console.clear();
-chalkAnimation.rainbow("Starting...");
-
+chalkAnimation.rainbow("Starting...");*/
+/*
 client.commands = new Collection();
 client.cooldowns = new Collection();
 client.slash = new Collection();
-
+*/
 const errorLogs = new W({ url: `${process.env.errorHook}` });
-
+/*
 const handlers = fs.readdirSync("./src/handlers/");
 
 for (const file of handlers) {
   require(`./src/handlers/${file}`)(client);
 }
-
+*/
 process.on("unhandledRejection", (error) => {
   const errorMessage =
     error.message.length > 950
