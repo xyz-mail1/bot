@@ -1,6 +1,5 @@
-
-const Discord = require('discord.js');
-const pluralize = require('pluralize');
+const Discord = require("discord.js");
+const pluralize = require("pluralize");
 //const db = require('$db/bite.js');
 const fetch = require("node-fetch");
 
@@ -10,16 +9,16 @@ module.exports = {
   async execute(client, message, args) {
     const a = pluralize(this.name);
     const sender = message.author.id;
-    const mention = message.mentions.users.first();
+    const mention = message.mentions.users.first() || message.author;
     const target = mention.id;
     if (target) {
-      client.incrementCount('bites', sender, target);
-      const count = await client.getCount('bites', sender, target);
+      client.incrementCount("bites", sender, target);
+      const count = await client.getCount("bites", sender, target);
       const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
       const res = await response.json();
       const image = await res.link;
       const embed = new Discord.EmbedBuilder()
-        .setColor('#ffb3b3')
+        .setColor("#ffb3b3")
         .setTitle("You gave a bite!")
         .setURL("https://discord.com/invite/NQpTcs6r8z")
         .setDescription(`${message.author} bites ${mention}`)
@@ -29,12 +28,12 @@ module.exports = {
       } else {
         embed.setFooter({ text: `That's a total of ${count} bites now!` });
       }
-      await message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+      await message.reply({
+        embeds: [embed],
+        allowedMentions: { repliedUser: false },
+      });
     } else {
-      message.reply('You need to mention someone to kiss!');
+      message.reply("You need to mention someone to kiss!");
     }
   },
-}
-
-
-
+};
