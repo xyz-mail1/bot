@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
-
+const PurrBot = require("$purr/purr");
+const api = new PurrBot();
 module.exports = {
   name: "blowjob",
   aliases: ["bj"],
@@ -14,17 +15,13 @@ module.exports = {
     if (target) {
       client.incrementCount("blowjobs", sender, target);
       const count = await client.getCount("blowjobs", sender, target);
-      const response = await fetch(
-        "https://purrbot.site/api/img/nsfw/blowjob/gif",
-      );
-      const res = await response.json();
-      const image = await res.link;
+      const gif = await api.nsfw("blowjob");
       const embed = new Discord.EmbedBuilder()
         .setColor("#ffb3b3")
         .setTitle("You gave a blowjob!")
         .setURL("https://discord.com/invite/NQpTcs6r8z")
         .setDescription(`${message.author} gives ${mention} a blowjob`)
-        .setImage(image);
+        .setImage(gif.link);
       if (count === 1) {
         embed.setFooter({ text: `It's their first blowjob from you!` });
       } else {
