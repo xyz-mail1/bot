@@ -6,7 +6,7 @@ module.exports = {
   aliases: ["bang", "rape", "sex"],
   cooldown: 3,
   SnM: true,
-  async execute(client, message, args) {
+  run: async (client, message, args) => {
     const sender = message.author.id;
     const mention = message.mentions.users.first() || message.author;
     const target = mention.id;

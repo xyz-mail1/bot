@@ -1,11 +1,9 @@
-const TicTacToe = require('discord-tictactoe');
-const game = new TicTacToe({ language: 'en' })
-
+const TicTacToe = require("discord-tictactoe");
+const game = new TicTacToe({ language: "en" });
 
 module.exports = {
   name: "ttt",
-  execute(client, message, args) {
+  run: (client, message, args) => {
     game.handleMessage(message);
-  }
-}
-
+  },
+};

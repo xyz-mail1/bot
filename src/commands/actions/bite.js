@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 module.exports = {
   name: "bite",
   cooldown: 3,
-  async execute(client, message, args) {
+  run: async (client, message, args) => {
     const a = pluralize(this.name);
     const sender = message.author.id;
     const mention = message.mentions.users.first() || message.author;

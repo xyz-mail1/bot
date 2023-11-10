@@ -1,7 +1,7 @@
 const { Connect4 } = require("discord-gamecord");
 module.exports = {
   name: "c4",
-  execute(client, message, args) {
+  run: (client, message, args) => {
     const opp = message.mentions.members.first();
     if (!opp) return message.reply("Mention a user to play with");
     const Game = new Connect4({

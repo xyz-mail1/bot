@@ -5,7 +5,7 @@ module.exports = {
   description: "help",
   aliases: ["h"],
 
-  async execute(client, message, args) {
+  run: async (client, message, args) => {
     const roleColor =
       message.guild.members.me.displayHexColor === "#000000"
         ? "#ffffff"

@@ -1,37 +1,47 @@
-const { Collection, Events, EmbedBuilder: E, WebhookClient: W, codeBlock } = require('discord.js');
+const {
+  Collection,
+  Events,
+  EmbedBuilder: E,
+  WebhookClient: W,
+  codeBlock,
+} = require("discord.js");
 const cooldowns = new Collection();
-const errorLogs = new W({ url: `${process.env.errorHook}` })
-//const prefixes = ["sm", "!", "shivie", "maggie", "love", "<@1078352955771732078>"];
-var PrettyError = require('pretty-error');
+const errorLogs = new W({ url: `${process.env.errorHook}` });
+
+var PrettyError = require("pretty-error");
 var pe = new PrettyError();
 module.exports = {
   name: Events.MessageCreate,
   execute: async (message) => {
     let client = message.client;
     const ping = `<@${client.user.id}>`;
-    const prefixes = ["sm", "!", "shivie", "maggie", "love", ping]
+    const prefixes = ["sm", "!", "shivie", "maggie", "love", ping];
     if (message.author.bot) return;
     const lowercasedMessage = message.content.toLowerCase();
-    const prefixUsed = prefixes.find((prefix) => lowercasedMessage.startsWith(prefix.toLowerCase()));
+    const prefixUsed = prefixes.find((prefix) =>
+      lowercasedMessage.startsWith(prefix.toLowerCase()),
+    );
     if (!prefixUsed) return;
     const strippedMessage = lowercasedMessage.slice(prefixUsed.length);
 
-    const args = strippedMessage.trim().split(' ');
+    const args = strippedMessage.trim().split(" ");
     const commandName = args.shift().toLowerCase();
 
-
-    const command = client.commands.get(commandName)
-      || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    const command =
+      client.commands.get(commandName) ||
+      client.commands.find(
+        (cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+      );
 
     if (!command) return;
 
-    const list = ['911822497891102741', '901366487850303499']
+    const list = ["911822497891102741", "901366487850303499"];
     if (command.SnM) {
       if (!list.includes(message.author.id)) return;
     }
 
-    if (command.guildOnly && message.channel.type === 'dm') {
-      return message.reply('I can\'t execute that command inside DMs!');
+    if (command.guildOnly && message.channel.type === "dm") {
+      return message.reply("I can't execute that command inside DMs!");
     }
 
     if (command.args && !args.length) {
@@ -59,36 +69,42 @@ module.exports = {
 
       if (now < expirationTime) {
         const timeLeft = (expirationTime - now) / 1000;
-        return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+        return message.reply(
+          `please wait ${timeLeft.toFixed(
+            1,
+          )} more second(s) before reusing the \`${command.name}\` command.`,
+        );
       }
-
     }
 
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-      command.execute(client, message, args);
+      command.run(client, message, args);
     } catch (error) {
-
-      if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';
-      if (error.stack) if (error.stack.length > 950) error.stack = error.stack.slice(0, 950) + '... view console for details';
-      if (!error.stack) return
-      const errorEmbed = new E()
-        .setTitle(`⛔ Prefix command error`)
-        .addFields([{ name: "Error", value: error ? codeBlock(error) : "No error" },
-        { name: "Stack error", value: error.stack ? codeBlock(error.stack) : "No stack error" }]);
-      console.log(pe.render(error))
+      if (error)
+        if (error.length > 950)
+          error = error.slice(0, 950) + "... view console for details";
+      if (error.stack)
+        if (error.stack.length > 950)
+          error.stack =
+            error.stack.slice(0, 950) + "... view console for details";
+      if (!error.stack) return;
+      const errorEmbed = new E().setTitle(`⛔ Prefix command error`).addFields([
+        { name: "Error", value: error ? codeBlock(error) : "No error" },
+        {
+          name: "Stack error",
+          value: error.stack ? codeBlock(error.stack) : "No stack error",
+        },
+      ]);
+      console.log(pe.render(error));
       try {
-        errorLogs.send({ embeds: [errorEmbed] })
+        errorLogs.send({ embeds: [errorEmbed] });
       } catch {
-        console.log('Error sending prefix command to webhook')
-        console.log(pe.render(error))
-
+        console.log("Error sending prefix command to webhook");
+        console.log(pe.render(error));
       }
-      //}
     }
-  }
-}
-
-
+  },
+};
