@@ -1,17 +1,17 @@
 const Discord = require("discord.js");
-const pluralize = require("pluralize");
-//const db = require('$db/bite.js');
+const PurrBot = require("$purr/purr");
 const fetch = require("node-fetch");
-
+const api = new PurrBot();
 module.exports = {
   name: "bite",
   cooldown: 3,
   run: async (client, message, args) => {
-    const a = pluralize(this.name);
     const sender = message.author.id;
     const mention = message.mentions.users.first() || message.author;
     const target = mention.id;
     if (target) {
+      const gif = await api.sfw("bite");
+      console.log(gif);
       client.incrementCount("bites", sender, target);
       const count = await client.getCount("bites", sender, target);
       const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
