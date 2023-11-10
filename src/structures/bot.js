@@ -4,7 +4,8 @@ const {
   Partials,
   Collection,
 } = require("discord.js"),
-  fs = require("node:fs");
+  fs = require("node:fs"),
+  Logger = require("../helpers/logger");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -43,6 +44,7 @@ module.exports = class BotClient extends Client {
     });
 
     this.wait = require("util").promisify(setTimeout);
+    this.logger = Logger;
 
     this.commands = new Collection();
     this.slash = new Collection();
