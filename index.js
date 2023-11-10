@@ -1,5 +1,7 @@
 require("dotenv").config();
-
+require("better-module-alias")(__filename, {
+  $purr: "./wrapper/purr.js",
+});
 const token = process.env.token,
   BotClient = require("./src/structures/bot"),
   client = new BotClient();
