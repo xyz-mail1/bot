@@ -11,18 +11,16 @@ module.exports = {
     const target = mention.id;
     if (target) {
       const gif = await api.sfw("bite");
-      console.log(gif);
+
       client.incrementCount("bites", sender, target);
       const count = await client.getCount("bites", sender, target);
-      const response = await fetch("https://purrbot.site/api/img/sfw/bite/gif");
-      const res = await response.json();
-      const image = await res.link;
+
       const embed = new Discord.EmbedBuilder()
         .setColor("#ffb3b3")
         .setTitle("You gave a bite!")
         .setURL("https://discord.com/invite/NQpTcs6r8z")
         .setDescription(`${message.author} bites ${mention}`)
-        .setImage(image);
+        .setImage(gif.link);
       if (count === 1) {
         embed.setFooter({ text: `It's their first bite from you!` });
       } else {

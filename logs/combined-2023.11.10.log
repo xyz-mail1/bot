@@ -25,3 +25,6 @@
 {"level":30,"time":1699630063212,"pid":8438,"hostname":"localhost","msg":"Ready! Logged in as maggie#8392"}
 {"level":30,"time":1699630220682,"pid":10640,"hostname":"localhost","msg":"Ready! Logged in as maggie#8392"}
 {"level":30,"time":1699630265039,"pid":11420,"hostname":"localhost","msg":"Ready! Logged in as maggie#8392"}
+{"level":30,"time":1699630467279,"pid":14681,"hostname":"localhost","msg":"Ready! Logged in as maggie#8392"}
+{"level":50,"time":1699630479452,"pid":14681,"hostname":"localhost","err":{"type":"TypeError","message":"gif.json is not a function","stack":"TypeError: gif.json is not a function\n    at Object.run (/data/data/com.termux/files/home/bot/src/commands/actions/bite.js:14:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"},"msg":"Unhandled exception: gif.json is not a function"}
+{"level":30,"time":1699630599420,"pid":17932,"hostname":"localhost","msg":"Ready! Logged in as maggie#8392"}
