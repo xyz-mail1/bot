@@ -8,8 +8,12 @@ module.exports = (client) => {
       .readdirSync(`./src/commands/${folder}`)
       .filter((file) => file.endsWith(".js"));
     for (const file of commandFiles) {
-      const command = require(`../commands/${folder}/${file}`);
-      client.commands.set(command.name, command);
+      try {
+        const command = require(`../commands/${folder}/${file}`);
+        client.commands.set(command.name, command);
+      } catch (err) {
+        client.logger.error(`Failed to load ${file} Reason: ${err.message}`);
+      }
     }
   }
 };
