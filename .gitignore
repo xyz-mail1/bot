@@ -3,3 +3,4 @@ node_modules
 hug_data.db
 kiss_data.db
 main.db
+logs
