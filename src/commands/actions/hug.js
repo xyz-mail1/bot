@@ -1,13 +1,13 @@
 const Discord = require("discord.js");
-const pluralize = require("pluralize");
-//const db = require('$db/bite.js');
+
+
 const fetch = require("node-fetch");
 
 module.exports = {
   name: "hug",
   cooldown: 3,
   run: async (client, message, args) => {
-    const a = pluralize(this.name);
+    
     const sender = message.author.id;
     const mention = message.mentions.users.first() || message.author;
     const target = mention.id;

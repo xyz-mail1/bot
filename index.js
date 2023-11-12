@@ -9,10 +9,10 @@ const token = process.env.token,
 client.loadHandlers();
 
 process.on("unhandledRejection", (err) =>
-  client.logger.error(`Unhandled exception`, err),
+  console.log(`Unhandled exception`, err),
 );
 process.on("uncaughtException", (err) =>
-  client.logger.error(`Uncaught Exception`, err),
+  console.log(`Uncaught Exception`, err),
 );
 
 client.login(token);
